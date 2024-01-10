@@ -1,3 +1,3 @@
 #!/usr/bin/env node
-const { askProjectName } = require('../dist/index.js');
-askProjectName(process.argv[2]);
+const { init } = require('../dist/index.js');
+init(process.argv[2]);

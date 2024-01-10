@@ -1,76 +1,103 @@
 import path from 'path'
-import colors from 'colors'
-import createFolder from './lib/createFolder'
-import createAppStructure from './lib/createAppStructure'
-import { existsSync } from 'fs'
-import { createInterface } from 'readline'
+import { copySync } from 'fs-extra'
+import { green, yellow } from 'colors'
+import prompt, { type Answers } from 'prompts'
+
+import questions from './lib/questions'
+import { type QuestionResponses, type QuestionKeys } from './types'
+import { exec } from 'child_process'
+
+const currentDirectory = process.cwd()
 
 /**
- * Abort controller variable if cancelled
- */
-const ac = new AbortController()
-const signal = ac.signal
-
-/**
- * Interface required by node and cmd to ask project name every time is needed and start to build the expected project
-*/
-const rl = createInterface({
-  input: process.stdin,
-  output: process.stdout
-})
-
-/**
- * Async function to ask project name every time is needed and start to build the expected project
- * @returns {string}
+ * The initialization of the app to create the express api
+ * @async
  * @example
- * askProjectName()
-  .then(() => {doSomething...})
-  .catch(() => {doSomething...})
+ * init()
  * @author ConanGH-S
  */
-export const askProjectName = async (): Promise<string> => {
-  return await new Promise((resolve) => {
-    rl.question(`${colors.blue('?')} Application name: ${colors.gray('->')} `, (response: string) => {
-      do {
-        if (existsSync(response)) console.warn(colors.yellow('! Warning: ') + 'The project name already exists, please choose another one' + '\n')
-        else {
-          resolve(response)
-          rl.close()
-          break
-        }
-      } while (existsSync(response))
-    })
-  })
+export async function init (): Promise<void> {
+  const { userProjectName, projectLang, projectType, installDependencies } = await setProjectOptions() as QuestionResponses
+  const projectName = parseProjectName(userProjectName)
+  const projectPath = path.join(currentDirectory, projectName)
+  const template = path.join(__dirname, `/templates/${projectType}-${projectLang}/`)
+  cloneTemplate(template, projectPath)
+  if (installDependencies) await installPackageDependencies(projectPath)
+  console.info(green('Run: ') + yellow(`cd ${projectName}`))
+  if (!installDependencies) console.info(green('Run: ') + yellow('npm install') + green(' to install dependencies'))
+  console.info(green('Run: ') + yellow('npm start or npm start:dev') + green(' to initializate the app'))
 }
 
-askProjectName()
-  .then((userLocation: string) => {
-    const location = userLocation.trim().replace(/ /g, '-')
-    const searchSpaces = userLocation.includes(' ')
-    const currentDirectory = process.cwd()
+/**
+ * Async function to ask project options to build the expected project
+ * @returns {string}
+ * @example
+ * const name = await setProjectOptions()
+ * @author ConanGH-S
+ */
+export async function setProjectOptions (): Promise<Answers<QuestionKeys>> {
+  const response = await prompt(questions)
+  return response
+}
+
+/**
+ * Parse the name of the application with "-"
+ * @param {string} name
+ * @returns {string}
+ * @example
+ * const parsed = parseProjectName('My App')
+ * console.log(parsed) // my-app
+ * @author ConanGH-S
+ */
+export function parseProjectName (name: string): string {
+  const searchSpaces = name.includes(' ')
+  if (searchSpaces) console.warn(yellow('! Warning: ') + 'Your spaces will be trimmed and converted to "-"')
+  const projectName = name.trim().replace(/ /g, '-')
+  return projectName
+}
+
+/**
+ * Clone a directory using ./templates into the user directory
+ * @param {string} template
+ * @param {string} copyTo
+ * @returns {void}
+ * @example
+ * copySync('src/templates/express-js/', '/tmp/my-backend-app')
+ * @author ConanGH-S
+ */
+function cloneTemplate (template: string, copyTo: string): void {
+  try {
+    copySync(template, copyTo)
+  } catch (error) {
+    console.error('Oh no!', error)
+  }
+}
+
+async function installPackageDependencies (projectPath: string): Promise<void> {
+  await new Promise<void>((resolve, reject) => {
     try {
-      if (searchSpaces) console.warn(colors.yellow('! Warning: ') + 'Your spaces will be trimmed and converted to "-"')
-      const actualPath = path.join(currentDirectory, location)
-      if (actualPath !== currentDirectory) createFolder(location)
-      createAppStructure(location).then(() => {
-        console.info(colors.green('Run: ') + colors.yellow(`cd ${location}`))
-        console.info(colors.green('Run: ') + colors.yellow('npm install') + colors.green(' to install dependencies'))
-        console.info(colors.green('Run: ') + colors.yellow('npm start or npm start:dev') + colors.green(' to initializate the app'))
+      let dotCount = 0
+      const intervalId = setInterval(() => {
+        process.stdout.clearLine(1)
+        process.stdout.cursorTo(0)
+        process.stdout.write('Installing dependencies' + '.'.repeat(dotCount++))
+        if (dotCount > 3) dotCount = 0
+      }, 500)
+
+      exec(`cd ${projectPath} && npm install`, (error, stdout) => {
+        clearInterval(intervalId) // Detén la animación aquí
+        if (error != null) {
+          console.error(`exec error: ${error.message}`)
+          return
+        }
+        console.log(stdout)
+        resolve()
       })
-        .catch((err: string) => {
-          console.log(colors.red(err))
-        })
     } catch (error) {
       console.error(error)
     }
   })
-  .catch((error) => {
-    console.error(error)
-  })
+}
 
-/**
- * If the user abort create the app, show a message
- */
-signal.addEventListener('abort', () => {
-  console.log('Process ended')
-}, { once: true })
+init()
+  .catch((error) => { console.error(error) })

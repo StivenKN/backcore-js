@@ -1,8 +1,4 @@
-/**
- * Content for package.json
- * @author ConanGH-S
- */
-export default `{
+{
   "name": "my-app",
   "version": "0.0.1",
   "type": "module",
@@ -25,4 +21,4 @@ export default `{
     "express": "latest",
     "jsonwebtoken": "latest"
   }
-}`
+}
