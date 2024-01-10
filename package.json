@@ -1,7 +1,7 @@
 {
   "name": "create-backcore-js",
-  "version": "1.0.0",
-  "description": "Create a minimal express app with a simple command.",
+  "version": "1.0.1",
+  "description": "Create a minimal back-end app with a simple command.",
   "main": "index.js",
   "files": [
     "dist/",
@@ -25,11 +25,11 @@
     "build": "gulp"
   },
   "bin": {
-    "create-express-restapi": "./bin/createProject.js"
+    "create-backcore-js": "./bin/createProject.js"
   },
   "keywords": [
     "create",
-    "express",
+    "backend app generate",
     "api-rest",
     "apirest",
     "backend",

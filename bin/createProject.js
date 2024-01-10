@@ -1,3 +1,2 @@
 #!/usr/bin/env node
-const { init } = require('../dist/index.js');
-init(process.argv[2]);
+require('../dist/index.js');
