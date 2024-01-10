@@ -1,28 +1,26 @@
 # Express App Project
 
-Create a minimal express app with a simple command.
+Create a minimalistic app using your favorite back-end framework.
 
 ## Note
 
-This project is not related to Express, it is an open source package.
+This project is not related to any back end framework, it is an open source package.
 
 ## Usage
 
 ```bash
-npm create express-restapi@latest
+npm create backcore-js@latest
 ```
 Or
 ```bash
-npx create-express-restapi@latest
+npx create-backcore-js@latest
 ```
 
 # Features
 
-- Creates a minimal and functional Node.js application with Express.js.
+- Creates a minimal and functional Node.js application with your favorite back-end framework.
 
-- Allows the creation of backend RESTful API applications with Node.js.
-
-- Facilitates the quick start of Node.js and Express.js projects.
+- Facilitates the quick start of Node.js and back-end projects.
 
 # Author
 
@@ -33,17 +31,8 @@ npx create-express-restapi@latest
 # License
 ISC License
 
-# Acknowledgments
-
-
-- [Express.js](https://expressjs.com/es/) for providing a solid and easy-to-use framework.
-
-- [Nodemon](https://www.npmjs.com/package/nodemon) for providing a quick start and automatic server restart tool.
-
-- [Typescript](https://www.typescriptlang.org/) for providing type types and code analysis.
-
 # Changes
-- Check the changes on [GitHub](https://github.com/ConanGH-S/create-express-app) to follow updates and fixes
+- Check the changes on [GitHub](https://github.com/ConanGH-S/backcore-js) to follow updates and fixes
 
 # Troubleshooting
-f you encounter issues or have questions, feel free to open an [issue](https://github.com/ConanGH-S/create-express-app/issues) on GitHub.
+f you encounter issues or have questions, feel free to open an [issue](https://github.com/ConanGH-S/backcore-js/issues) on GitHub.
