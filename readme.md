@@ -8,13 +8,9 @@ This project is not related to any back end framework, it is an open source pack
 
 ## Usage
 
-```bash
-npm create backcore-js@latest
-```
+> `npm create backcore-js@latest`
 Or
-```bash
-npx create-backcore-js@latest
-```
+`npx create-backcore-js@latest`
 
 # Features
 
@@ -35,4 +31,4 @@ ISC License
 - Check the changes on [GitHub](https://github.com/ConanGH-S/backcore-js) to follow updates and fixes
 
 # Troubleshooting
-f you encounter issues or have questions, feel free to open an [issue](https://github.com/ConanGH-S/backcore-js/issues) on GitHub.
+If you encounter issues or have questions, feel free to open an [issue](https://github.com/ConanGH-S/backcore-js/issues) on GitHub.
