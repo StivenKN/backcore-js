@@ -3,17 +3,15 @@ import { copySync } from 'fs-extra'
 import { green, yellow } from 'colors'
 import prompt, { type Answers } from 'prompts'
 
-import questions from './lib/questions'
-import { type QuestionResponses, type QuestionKeys } from './types'
+import { type QuestionResponses } from './types'
 import { exec } from 'child_process'
+import questions from './lib/questions'
 
 const currentDirectory = process.cwd()
 
 /**
  * The initialization of the app to create the express api
  * @async
- * @example
- * init()
  * @author ConanGH-S
  */
 export async function init (): Promise<void> {
@@ -27,6 +25,7 @@ export async function init (): Promise<void> {
   if (!installDependencies) console.info(green('Run: ') + yellow('npm install') + green(' to install dependencies'))
   console.info(green('Run: ') + yellow('npm start or npm start:dev') + green(' to initializate the app'))
 }
+void init()
 
 /**
  * Async function to ask project options to build the expected project
@@ -35,7 +34,7 @@ export async function init (): Promise<void> {
  * const name = await setProjectOptions()
  * @author ConanGH-S
  */
-export async function setProjectOptions (): Promise<Answers<QuestionKeys>> {
+export async function setProjectOptions (): Promise<Answers<any>> {
   const response = await prompt(questions)
   return response
 }
@@ -84,12 +83,8 @@ async function installPackageDependencies (projectPath: string): Promise<void> {
         if (dotCount > 3) dotCount = 0
       }, 500)
 
-      exec(`cd ${projectPath} && npm install`, (error, stdout) => {
-        clearInterval(intervalId) // Detén la animación aquí
-        if (error != null) {
-          console.error(`exec error: ${error.message}`)
-          return
-        }
+      exec(`cd ${projectPath} && npm install`, (stdout) => {
+        clearInterval(intervalId)
         console.log(stdout)
         resolve()
       })
@@ -98,6 +93,3 @@ async function installPackageDependencies (projectPath: string): Promise<void> {
     }
   })
 }
-
-init()
-  .catch((error) => { console.error(error) })
