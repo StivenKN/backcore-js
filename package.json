@@ -1,6 +1,6 @@
 {
   "name": "create-backcore-js",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Create a minimal back-end app with a simple command.",
   "main": "index.js",
   "files": [
