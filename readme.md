@@ -1,4 +1,4 @@
-# Express App Project
+# BackCore JS
 
 Create a minimalistic app using your favorite back-end framework.
 
